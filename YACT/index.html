@@ -61,9 +61,11 @@
     <div class="container-fluid" style="width:95%; margin-top:20px;">
       <div class="row">
         
-        <div class="col-md-2 col-sm-3" style="margin-top:20px;">
+        <div class="col-md-2 col-sm-3" style="margin-top:0px;">
           <!-- Single button -->
+          <div><img src="logo.png" style="height:60px;" /></div>
           <div class="btn-group" style="width:100%;">
+            <button class="btn btn-default" style="width:100%;" onclick="#abc">How to Play</button><br /><br /><br /><br />
             <button type="button" class="btn btn-default dropdown-toggle" style="width:100%;" data-toggle="dropdown"><span id="boardtype">Random</span> <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu" style="width:100%;">
@@ -75,39 +77,54 @@
               <li><a href="#" class="boardoption">Westerplatte</a></li>
             </ul>
           </div>
-          <br /><br /><br />
+          <br /><br />
           <div class="list-group" style="border: 2px solid #5cb85c; border-radius: 7px;">
             <a class="list-group-item green" id="p00" onclick="changeMode(0,0)">Human</a>
             <a class="list-group-item" id="p01" onclick="changeMode(0,1)">Minimax</a>
             <a class="list-group-item" id="p02" onclick="changeMode(0,2)">Alpha-beta</a>
           </div>
-          <br /><br />
+          <br />
           <div class="list-group" style="border: 2px solid #428bca; border-radius: 7px;">
             <a class="list-group-item" id="p10" onclick="changeMode(1,0)">Human</a>
             <a class="list-group-item blue" id="p11" onclick="changeMode(1,1)">Minimax</a>
             <a class="list-group-item" id="p12" onclick="changeMode(1,2)">Alpha-beta</a>
           </div>
-          <br /><br />
+          <br />
           <button class="btn btn-warning" style="width:100%;" id="start" onclick="startGame()">Start</button>
           <button class="btn btn-warning" style="width:100%; display:none;" id="restart" onclick="restartGame()">Restart</button>
         </div>
         <div class="col-md-8">
-          <div class="container" style="width:75%;">
+          <div class="container" style="width:80%;">
             <div class="panel panel-default">
+              <table class="table">
+                <tr>
+                  <td ></td>
+                  <td style="background-color: transparent; font-size:20px; text-align: center; vertical-align: middle;">A</td>
+                  <td style="background-color: transparent; font-size:20px; text-align: center; vertical-align: middle;">B</td>
+                  <td style="background-color: transparent; font-size:20px; text-align: center; vertical-align: middle;">C</td>
+                  <td style="background-color: transparent; font-size:20px; text-align: center; vertical-align: middle;">D</td>
+                  <td style="background-color: transparent; font-size:20px; text-align: center; vertical-align: middle;">E</td>
+                  <td style="background-color: transparent; font-size:20px; text-align: center; vertical-align: middle;">F</td>
+                </tr>
+              </table>
               <table class="table table-bordered" id="gameboard"></table>
             </div>
           </div>
         </div>
-        <div class="col-md-2 col-sm-3 " style="margin-top:100px;">
+        <div class="col-md-2 col-sm-3 " style="margin-top:50px;">
           <div class="list-group">
             <span class="list-group-item green" id="player1"><h3>-</h3></span><br />
             <span class="list-group-item blue" id="player2"><h3>-</h3></span><br />
-            <span class="list-group-item warning" id="status" style="text-align: center;">-</span>
+            <span class="list-group-item potential" id="status" style="text-align: center;">-</span>
+          </div>
+          <div class="list-group" style="overflow: auto; height:300px;" id="logtable">
+            
           </div>
 
         </div>
       </div>
     </div>
+    <div id="abc"><br />sdzgfdsfg</div>
     <!-- <div id="footer">
         <h5>&copy;All rights reserved 2014 Arpit Kumar, Shrihari Bhat, Siddharth Rakesh & Sachin Kumar </h5>
     </div> -->
