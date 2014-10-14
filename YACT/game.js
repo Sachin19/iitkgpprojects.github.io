@@ -2,6 +2,8 @@ var currentBoard = new Array(6);
 var scores = new Array(6);
 var pscore = new Array(2);
 var pmode = new Array(2);
+var alphabet = ['A','B','C','D','E','F'];
+var logs = [];
 pmode[0]=0;
 pmode[1]=1;
 var turn = 1;
@@ -29,18 +31,6 @@ function utility(board, player, scores) {
 	}
 }
 
-function func(){
-	c=0;
-	for(var i=0; i<6; i++){
-		for(var j=0; j<6; j++){
-			if(currentBoard[i][j]==-1){
-				c+=1;
-			}
-		}
-	}
-	return c;
-}
-
 function isBoardFull(board) {
 	for(var i=0; i<6; i++){
 		for(var j=0; j<6; j++){
@@ -51,6 +41,11 @@ function isBoardFull(board) {
 	}
 	return true;
 }
+
+function addLog(logval) {
+	$('#logtable').append("<span class=\"list-group-item\" >"+logval+"</span>").fadeIn('slow');
+}
+
 function nextmoveRec(tboard, scores, tur, maxmin, level, player) {
 
 	if(level > 3 || isBoardFull(tboard)) {
@@ -168,7 +163,8 @@ function nextmoveRec(tboard, scores, tur, maxmin, level, player) {
 	
 }
 
-function nextmove(tboard,scores,turn) {
+//not being used
+/*function nextmove(tboard,scores,turn) {
 	var ss = new Array(36);
 	max1 = -4000;
 	maxi = -1;
@@ -309,7 +305,7 @@ function nextmove(tboard,scores,turn) {
 	return [ss[maxi*6+maxj],maxi,maxj];
 
 }
-
+*/
 /*nextmove*/
 
 
@@ -382,9 +378,18 @@ function playOpponent(tur){
 		currentBoard[i][j]=3-tur;
 		$('#'+i+"-"+j).removeClass("defaultback");
 		$('#'+i+"-"+j).addClass(other);
+		flag=0;
+		logval = ""+other;
 		r=i;
 		c=j;
+		alpha = alphabet[c];
+
 		if(extending(currentBoard,3-tur,r,c)){
+			
+			logval+=" M1 Death Blitz "+alpha+r;
+			addLog(logval);
+			logs.push(logval);
+			flag = 1;
 			t=c-1;
 			//alert(r+","+t);
 			if(r-1 >= 0){
@@ -392,6 +397,8 @@ function playOpponent(tur){
 				if(currentBoard[t][c] == tur){
 					$('#'+t+"-"+c).switchClass(cur,other);
 					currentBoard[t][c]=3-tur;
+					addLog(other+" captures "+alpha+t);
+					logs.push(other+" captures "+alpha+t);
 				}
 			}
 			if(r+1<6){
@@ -399,6 +406,8 @@ function playOpponent(tur){
 				if(currentBoard[t][c] == tur){
 					$('#'+t+"-"+c).switchClass(cur,other);	
 					currentBoard[t][c]=3-tur;
+					addLog(other+" captures "+alpha+t);
+					logs.push(other+" captures "+alpha+t); 
 				}
 			}
 			if(c-1>=0){
@@ -407,6 +416,9 @@ function playOpponent(tur){
 					//alert("yes");
 					$('#'+r+"-"+t).switchClass(cur,other);
 					currentBoard[r][t]=3-tur;
+					alpha = alphabet[t];
+					addLog(other+" captures "+alpha+r); 
+					logs.push(other+" captures "+alpha+r);
 				}
 			}
 			if(c+1<6){
@@ -414,8 +426,16 @@ function playOpponent(tur){
 				if(currentBoard[r][t] == tur){
 					$('#'+r+"-"+t).switchClass(cur,other);
 					currentBoard[r][t]=3-tur;
+					alpha = alphabet[t];
+					addLog(other+" captures "+alpha+r);
+					logs.push(other+" captures "+alpha+r);
+
 				}
 			}
+		}
+		if(flag==0) {
+			addLog(other+" paradrops "+alpha+r);
+			logs.push(other+" paradrops "+alpha+r);
 		}
 		updateScore(tur);
 		updateScore(3-tur);
@@ -446,14 +466,24 @@ function addListeners() {
 					$(this).removeClass();
 					$(this).addClass(cur);
 					currentBoard[r][c]=turn;
+					flag = 0;
+					logval = ""+cur;
+					alpha = alphabet[c];
 
+					
 					if(extending(currentBoard,turn,r,c)){
+						flag=1;
+						logval += " M1 Death Blitz "+alpha+r;
+						addLog(logval);
+						logs.push(logval);
 						if(r-1 >= 0) {
 							t = r-1;
 							if(currentBoard[t][c] == 3-turn){
 								ch=ch+1;
 								$('#'+t+"-"+c).switchClass("potential",cur);
 								currentBoard[t][c]=turn;
+								addLog(cur+" captures "+alpha+t);
+								logs.push(cur+" captures "+alpha+t);
 							}
 						}
 						if(r+1<6) {
@@ -462,6 +492,8 @@ function addListeners() {
 								ch=ch+1;
 								$('#'+t+"-"+c).switchClass("potential",cur);	
 								currentBoard[t][c]= turn;
+								addLog(cur+" captures "+alpha+t);
+								logs.push(cur+" captures "+alpha+t);
 							}
 						}
 						if(c-1>=0) {
@@ -470,6 +502,10 @@ function addListeners() {
 								ch=ch+1;
 								$('#'+r+"-"+t).switchClass("potential",cur);
 								currentBoard[r][t]=turn;
+								alpha = alphabet[t];
+								addLog(cur+" captures "+alpha+r);
+								logs.push(cur+" captures "+alpha+r);
+
 							}
 						}
 						if(c+1<6) {
@@ -478,8 +514,16 @@ function addListeners() {
 								ch=ch+1;
 								$('#'+r+"-"+t).switchClass("potential",cur);
 								currentBoard[r][t]=turn;
+								alpha = alphabet[t];
+								addLog(cur+" captures "+alpha+r);
+								logs.push(curher+" captures "+alpha+r);
 							}
 						}
+					}
+
+					if(flag==0) {
+						addLog(cur+" paradrops "+alpha+r);
+						logs.push(cur+" paradrops "+alpha+r);
 					}
 
 					updateScore(turn);
@@ -654,10 +698,9 @@ function resetBoard(){
 	updateScore(1);
 	updateScore(2);
 	setStatus("Click Start to play");
-
-	board="";
+	board = "";
 	for (var i = 0; i < 6; i++) {
-		board += "<tr>";
+		board += "<tr><td style=\"background-color: transparent; border:none; font-size:20px; text-align: center; vertical-align: middle;\">"+i+"</td>";
 		for( var j=0; j<6; j++) {
 			board += "<td class=\"defaultback\" style=\"border: 5px solid #FFFFFF; border-radius:10px; text-align: center; vertical-align: middle;\"id=\""+i+"-"+j+"\"><span style=\"font-size:20px\">"+scores[i][j]+"</span></td>";
 		}
@@ -671,7 +714,6 @@ function resetBoard(){
 			$('#'+i+"-"+j).height(h);
 		}
 	}
-
 }
 
 function changeMode(p,m){
@@ -693,6 +735,10 @@ function changeMode(p,m){
 		started = 0;
 		$('#restart').hide().fadeOut('slow');
 		$('#start').show().fadeIn('slow');
+		logs = [];
+		$('#logtable').html("");
+		setStatus("CLick start to play");
+
 	}
 
 }
@@ -783,6 +829,10 @@ function restartGame() {
 	started = 0;
 	resetBoard();
 	startGame();
+	logs = [];
+	$('#logtable').html("");
+	setStatus("Click start to play");
+
 }
 
 function activateDropdownListener() {
@@ -791,10 +841,15 @@ function activateDropdownListener() {
 		$("#boardtype").html($(this).html());
 		$('#restart').hide().fadeOut('slow');
 		$('#start').show().fadeIn('slow');
+		logs = [];
+		$('#logtable').html("");
 		resetBoard();
 	});
 }
 $(document).ready(function(){
 	activateDropdownListener();
 	resetBoard();
+	$("logtable").on('scroll', function(){
+    	scrolled=true;
+	});
 });
