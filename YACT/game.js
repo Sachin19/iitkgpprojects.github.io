@@ -7,7 +7,7 @@ var logs = [];
 pmode[0]=0;
 pmode[1]=1;
 var turn = 1;
-var cur="green", other="blue";
+var cur="blue", other="green";
 var started=0;
 /*nextmove*/
 function utility(board, player, scores) {
@@ -537,7 +537,7 @@ function addListeners() {
 							playOpponent(turn);
 							if(isGameOver()){
 								w = winner();
-								if(w==1){
+								if(w==3){
 									setStatus("Green wins");
 								}
 								else if(w==2){
@@ -557,7 +557,7 @@ function addListeners() {
 					}
 					else{
 						w = winner();
-						if(w==1){
+						if(w==3){
 							setStatus("Green wins");
 						}
 						else if(w==2){
@@ -719,7 +719,7 @@ function resetBoard(){
 function changeMode(p,m){
 	if(pmode[p] != m){
 		pmode[p] = m;
-		if(p==0){
+		if(p==1){
 			$('#p'+p+'0').removeClass("green");
 			$('#p'+p+'1').removeClass("green");
 			$('#p'+p+'2').removeClass("green");
@@ -751,7 +751,7 @@ function p1MiniMax() {
 		//alert("sfvdsfg");
 		if(isGameOver()){
 			w = winner();
-			if(w==1){
+			if(w==3){
 				//setStatus("Green wins");
 			}
 			else if(w==2){
@@ -778,7 +778,7 @@ function p2MiniMax() {
 	setTimeout(function(){
 		if(isGameOver()){
 			w = winner();
-			if(w==1){
+			if(w==3){
 				setStatus("Green wins");
 			}
 			else if(w==2){
@@ -805,20 +805,20 @@ function startGame() {
 	$('#restart').show().fadeIn('slow');
 	if(started == 0) {
 		started = 1;
-		setStatus("Green")
+		setStatus("blue")
 		if(pmode[0] == 0 || pmode[1] == 0)
 			addListeners();
 		if(pmode[0] != 0 && pmode[1]==0){
 			turn = 2;
-			cur="blue";
-			other="green";
-			setStatus("Green");
+			cur="green";
+			other="blue";
+			setStatus("green");
 			playOpponent(turn);
 		}
 		if(pmode[0] == 1 && pmode[1] == 1) {
 			turn = 2;
-			cur="blue";
-			other="green";
+			other="blue";
+			cur="green";
 			p1MiniMax();
 		}
 	}
@@ -849,7 +849,7 @@ function activateDropdownListener() {
 $(document).ready(function(){
 	activateDropdownListener();
 	resetBoard();
-	$("logtable").on('scroll', function(){
+	$("#logtable").on('scroll', function(){
     	scrolled=true;
 	});
 });
