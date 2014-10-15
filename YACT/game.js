@@ -9,7 +9,10 @@ pmode[1]=1;
 var turn = 1;
 var cur="blue", other="green";
 var started=0;
-/*nextmove*/
+dd=0;
+var to1, to2;
+
+
 function utility(board, player, scores) {
 	p1=0;
 	p2=0;
@@ -52,110 +55,121 @@ function nextmoveRec(tboard, scores, tur, maxmin, level, player) {
 		return [utility(tboard,player, scores),-1,-1];
 	}
 	else {
+
 		if(maxmin==0) {
-			//alert("hello"+level);
-			max1 = -4000;
-			maxi = -1;
-			maxj = -1;
 
-			for(var i=0;i<36;i++) {
+			var max1 = -4000;
+			var maxi = -1;
+			var maxj = -1;
 
-				var board = [];
-				for(l=0;l<6;l++) {
-					board[l] = tboard[l].slice(0);
-				}
-				r1 = parseInt(i/6);
-				c1 = parseInt(i%6);
-				
-				if(board[r1][c1] == -1) {
-					
-					board[r1][c1] = 3-tur;
-					if(extending(board,3-tur,r1,c1)) {
-						if(r1-1 >= 0) {
-							if(board[r1-1][c1] == tur) {
-								board[r1-1][c1] = 3-tur;
-							}
-						}
-						if(r1+1 < 6) {
-							if(board[r1+1][c1] == tur) {
-								board[r1+1][c1] = 3-tur;
-							}
-						}
-						if(c1-1 >= 0) {
-							if(board[r1][c1-1] == tur) {
-								board[r1][c1-1] = 3-tur;
-							}
-						}
-						if(c1+1 < 6) {
-							if(board[r1][c1+1] == tur) {
-								board[r1][c1+1] = 3-tur;
-							}
-						}
-					}
-					
-					result = nextmoveRec(board, scores, 3-tur, 1-maxmin, level+1, player);
+			for(var r1=0;r1<6;r1+=1) {
+				for(var c1=0;c1<6;c1+=1) {
 
-					if(result[0] > max1) {
-						var temp = result[0];
-						max1 = temp;
-						maxi = r1;
-						maxj = c1;
+					if(tboard[r1][c1] == -1) {
+
+						var board = new Array(6);
+						for(var l=0;l<6;l++) {
+							board[l] = new Array(6);
+						}
+
+						for(var l=0; l<6; l++){
+							for(var j=0; j<6; j++){
+								board[l][j] = tboard[l][j];
+							}
+						}
+
+						board[r1][c1] = 3-tur;
+						if(extending(board,3-tur,r1,c1)) {
+							if(r1-1 >= 0) {
+								if(board[r1-1][c1] == tur) {
+									board[r1-1][c1] = 3-tur;
+								}
+							}
+							if(r1+1 < 6) {
+								if(board[r1+1][c1] == tur) {
+									board[r1+1][c1] = 3-tur;
+								}
+							}
+							if(c1-1 >= 0) {
+								if(board[r1][c1-1] == tur) {
+									board[r1][c1-1] = 3-tur;
+								}
+							}
+							if(c1+1 < 6) {
+								if(board[r1][c1+1] == tur) {
+									board[r1][c1+1] = 3-tur;
+								}
+							}
+						}
+						
+						var result = nextmoveRec(board, scores, 3-tur, 1-maxmin, level+1, player);
+
+						if(result[0] > max1) {
+							max1 = result[0];
+							maxi = r1;
+							maxj = c1;
+						}
+						
 					}
 				}
 			}
-
 			return [max1,maxi,maxj];
 		}
 
 		else{
-			//alert("yello"+level);
-			min1 = 4000;
-			mini = -1;
-			minj = -1;
+			var min1 = 4000;
+			var mini = -1;
+			var minj = -1;
 
-			for(var i=0;i<36;i++) {
-				var board = [];
-				for(l=0;l<6;l++) {
-					board[l] = tboard[l].slice(0);
-				}
-				r1 = parseInt(i/6);
-				c1 = parseInt(i%6);
+			for(var r1=0;r1<6;r1+=1) {
+				for(var c1=0;c1<6;c1+=1) {
 
-				if(board[r1][c1] == -1) {
-					board[r1][c1] = 3-tur;
-					if(extending(board,3-tur,r1,c1)) {
-						if(r1-1 >= 0) {
-							if(board[r1-1][c1] == tur) {
-								board[r1-1][c1] = 3-tur;
+					if(tboard[r1][c1] == -1) {
+						var board = new Array(6);
+						for(l=0;l<6;l++) {
+							board[l] = new Array(6);
+						}
+
+						for(var l=0; l<6; l++){
+							for(var j=0; j<6; j++){
+								board[l][j] = tboard[l][j];
 							}
 						}
-						if(r1+1 < 6) {
-							if(board[r1+1][c1] == tur) {
-								board[r1+1][c1] = 3-tur;
+
+						board[r1][c1] = 3-tur;
+						if(extending(board,3-tur,r1,c1)) {
+							if(r1-1 >= 0) {
+								if(board[r1-1][c1] == tur) {
+									board[r1-1][c1] = 3-tur;
+								}
+							}
+							if(r1+1 < 6) {
+								if(board[r1+1][c1] == tur) {
+									board[r1+1][c1] = 3-tur;
+								}
+							}
+							if(c1-1 >= 0) {
+								if(board[r1][c1-1] == tur) {
+									board[r1][c1-1] = 3-tur;
+								}
+							}
+							if(c1+1 < 6) {
+								if(board[r1][c1+1] == tur) {
+									board[r1][c1+1] = 3-tur;
+								}
 							}
 						}
-						if(c1-1 >= 0) {
-							if(board[r1][c1-1] == tur) {
-								board[r1][c1-1] = 3-tur;
-							}
+						
+						var result = nextmoveRec(board, scores, 3-tur, 1-maxmin, level+1, player);
+						
+						if(result[0] < min1) {
+							min1 = result[0];
+							mini = r1;
+							minj = c1;
 						}
-						if(c1+1 < 6) {
-							if(board[r1][c1+1] == tur) {
-								board[r1][c1+1] = 3-tur;
-							}
-						}
-					}
-					
-					result = nextmoveRec(board, scores, 3-tur, 1-maxmin, level+1, player);
-					
-					if(result[0] < min1) {
-						min1 = result[0];
-						mini = r1;
-						minj = c1;
 					}
 				}
 			}
-			
 			return [min1,mini,minj];
 		}
 	}
@@ -163,6 +177,129 @@ function nextmoveRec(tboard, scores, tur, maxmin, level, player) {
 	
 }
 
+function nextMoveAlphaBeta(tboard, scores, tur, maxmin, level, player, alpha, beta) {
+	if(level > 4 || isBoardFull(tboard)) {
+		return [utility(tboard, player, scores), -1, -1];
+	}
+	else{
+		if(maxmin == 0) {
+			var maxi = 100;
+			var maxj = 100;
+
+			for(var r1=0;r1<6;r1+=1) {
+				for(var c1=0;c1<6;c1+=1) {
+
+					if(tboard[r1][c1] == -1) {
+
+						var board = new Array(6);
+						for(var l=0;l<6;l++) {
+							board[l] = new Array(6);
+						}
+
+						for(var l=0; l<6; l++){
+							for(var j=0; j<6; j++){
+								board[l][j] = tboard[l][j];
+							}
+						}
+
+						board[r1][c1] = 3-tur;
+						if(extending(board,3-tur,r1,c1)) {
+							if(r1-1 >= 0) {
+								if(board[r1-1][c1] == tur) {
+									board[r1-1][c1] = 3-tur;
+								}
+							}
+							if(r1+1 < 6) {
+								if(board[r1+1][c1] == tur) {
+									board[r1+1][c1] = 3-tur;
+								}
+							}
+							if(c1-1 >= 0) {
+								if(board[r1][c1-1] == tur) {
+									board[r1][c1-1] = 3-tur;
+								}
+							}
+							if(c1+1 < 6) {
+								if(board[r1][c1+1] == tur) {
+									board[r1][c1+1] = 3-tur;
+								}
+							}
+						}
+						
+						var result = nextMoveAlphaBeta(board, scores, 3-tur, 1-maxmin, level+1, player, alpha, beta);
+						if(alpha < result[0]) {
+							alpha = result[0];
+							maxi = r1;
+							maxj = c1;
+						}
+						if(beta <= alpha){
+							return [alpha, maxi, maxj];
+						}
+					}
+				}
+			}
+			return [alpha,maxi,maxj];
+		}
+
+		else {
+			var mini = -1;
+			var minj = -1;
+
+			for(var r1=0;r1<6;r1+=1) {
+				for(var c1=0;c1<6;c1+=1) {
+
+					if(tboard[r1][c1] == -1) {
+						var board = new Array(6);
+						for(l=0;l<6;l++) {
+							board[l] = new Array(6);
+						}
+
+						for(var l=0; l<6; l++){
+							for(var j=0; j<6; j++){
+								board[l][j] = tboard[l][j];
+							}
+						}
+
+						board[r1][c1] = 3-tur;
+						if(extending(board,3-tur,r1,c1)) {
+							if(r1-1 >= 0) {
+								if(board[r1-1][c1] == tur) {
+									board[r1-1][c1] = 3-tur;
+								}
+							}
+							if(r1+1 < 6) {
+								if(board[r1+1][c1] == tur) {
+									board[r1+1][c1] = 3-tur;
+								}
+							}
+							if(c1-1 >= 0) {
+								if(board[r1][c1-1] == tur) {
+									board[r1][c1-1] = 3-tur;
+								}
+							}
+							if(c1+1 < 6) {
+								if(board[r1][c1+1] == tur) {
+									board[r1][c1+1] = 3-tur;
+								}
+							}
+						}
+						
+						var result = nextMoveAlphaBeta(board, scores, 3-tur, 1-maxmin, level+1, player, alpha, beta);
+						if(beta > result[0]) {
+							beta = result[0];
+							mini = r1;
+							minj = c1;
+						}
+						if(beta <= alpha) {
+							return [beta,mini, minj];
+						}
+					}
+				}
+			}
+			return [beta,mini,minj];
+		}
+	}
+}
 //not being used
 /*function nextmove(tboard,scores,turn) {
 	var ss = new Array(36);
@@ -361,20 +498,22 @@ function winner() {
 };
 
 function playOpponent(tur){
-	//alert("hello");
-	var temp = nextmoveRec(currentBoard, scores, tur, 0, 1, 3-tur);
-	//alert(temp);
-	//var x = nextmove(currentBoard,scores,turn);
-	//alert(x);
+
+	var temp;
+	if(pmode[2-tur] == 2)
+		temp = nextMoveAlphaBeta(currentBoard, scores, tur, 0, 1, 3-tur, -10000, 10000);
+	else {
+		temp = nextmoveRec(currentBoard, scores, tur, 0, 1, 3-tur);
+	}
+
 	i=parseInt(temp[1]);
 	j=parseInt(temp[2]);
+
 	if(i<0 || j<0){
 		alert(i+" "+j);
 	}
-	//alert(i+" "+j);
-	//alert(currentBoard[i][j]);
-	if(currentBoard[i][j]==-1){
 
+	if(currentBoard[i][j]==-1){
 		currentBoard[i][j]=3-tur;
 		$('#'+i+"-"+j).removeClass("defaultback");
 		$('#'+i+"-"+j).addClass(other);
@@ -443,7 +582,10 @@ function playOpponent(tur){
 		//scores to be updated. keep in mind that expansions decrease opponenents score
 		return 1;
 	}
-	else return 0;
+	else {
+		alert("theres a problem here "+temp);
+		return 0;
+	}
 }
 
 function updateScore(p){
@@ -516,7 +658,7 @@ function addListeners() {
 								currentBoard[r][t]=turn;
 								alpha = alphabet[t];
 								addLog(cur+" captures "+alpha+r);
-								logs.push(curher+" captures "+alpha+r);
+								logs.push(cur+" captures "+alpha+r);
 							}
 						}
 					}
@@ -541,7 +683,7 @@ function addListeners() {
 									setStatus("Green wins");
 								}
 								else if(w==2){
-									setStatus("It a draw");
+									setStatus("It's a draw");
 								}
 								else{
 									setStatus("Blue wins");
@@ -561,7 +703,7 @@ function addListeners() {
 							setStatus("Green wins");
 						}
 						else if(w==2){
-							setStatus("It a draw");
+							setStatus("It's a draw");
 						}
 						else{
 							setStatus("Blue wins");
@@ -717,6 +859,8 @@ function resetBoard(){
 }
 
 function changeMode(p,m){
+	clearTimeout(to1);
+	clearTimeout(to2);
 	if(pmode[p] != m){
 		pmode[p] = m;
 		if(p==1){
@@ -744,10 +888,10 @@ function changeMode(p,m){
 }
 
 function p1MiniMax() {
-	//setStatus(cur);
+	setStatus(cur);
 	playOpponent(turn);
 	//alert("hello");
-	setTimeout(function(){
+	to1 = setTimeout(function(){
 		//alert("sfvdsfg");
 		if(isGameOver()){
 			w = winner();
@@ -755,14 +899,13 @@ function p1MiniMax() {
 				//setStatus("Green wins");
 			}
 			else if(w==2){
-				setStatus("It a draw");
+				setStatus("It's a draw");
 			}
 			else{
 				setStatus("Blue wins");
 			}
 		}
 		else{
-			setStatus("heere");
 			turn = 3-turn;
 			temp = cur;
 			cur = other;
@@ -775,14 +918,14 @@ function p1MiniMax() {
 function p2MiniMax() {
 	setStatus(cur);
 	playOpponent(turn);
-	setTimeout(function(){
+	to2 = setTimeout(function(){
 		if(isGameOver()){
 			w = winner();
 			if(w==3){
 				setStatus("Green wins");
 			}
 			else if(w==2){
-				setStatus("It a draw");
+				setStatus("It's a draw");
 			}
 			else{
 				setStatus("Blue wins");
@@ -805,6 +948,9 @@ function startGame() {
 	$('#restart').show().fadeIn('slow');
 	if(started == 0) {
 		started = 1;
+		turn = 1;
+		cur = "blue";
+		other = "green";
 		setStatus("blue")
 		if(pmode[0] == 0 || pmode[1] == 0)
 			addListeners();
@@ -815,7 +961,7 @@ function startGame() {
 			setStatus("green");
 			playOpponent(turn);
 		}
-		if(pmode[0] == 1 && pmode[1] == 1) {
+		if(pmode[0] != 0 && pmode[1] != 0) {
 			turn = 2;
 			other="blue";
 			cur="green";
@@ -826,6 +972,8 @@ function startGame() {
 }
 
 function restartGame() {
+	clearTimeout(to1);
+	clearTimeout(to2);
 	started = 0;
 	resetBoard();
 	startGame();
@@ -838,6 +986,8 @@ function restartGame() {
 function activateDropdownListener() {
 	$(".boardoption").click(function(){
 		started=0;
+		clearTimeout(to1);
+		clearTimeout(to2);
 		$("#boardtype").html($(this).html());
 		$('#restart').hide().fadeOut('slow');
 		$('#start').show().fadeIn('slow');
