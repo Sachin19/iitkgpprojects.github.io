@@ -11,7 +11,9 @@ var cur="blue", other="green";
 var started=0;
 dd=0;
 var to1, to2;
-
+var nodesExpanded = new Array(2);
+var moves = new Array(2);
+var timesum = new Array(2);
 
 function utility(board, player, scores) {
 	p1=0;
@@ -50,6 +52,8 @@ function addLog(logval) {
 }
 
 function nextmoveRec(tboard, scores, tur, maxmin, level, player) {
+
+	nodesExpanded[player-1]+=1;
 
 	if(level > 3 || isBoardFull(tboard)) {
 		return [utility(tboard,player, scores),-1,-1];
@@ -178,6 +182,9 @@ function nextmoveRec(tboard, scores, tur, maxmin, level, player) {
 }
 
 function nextMoveAlphaBeta(tboard, scores, tur, maxmin, level, player, alpha, beta) {
+
+	nodesExpanded[player-1]+=1;
+
 	if(level > 4 || isBoardFull(tboard)) {
 		return [utility(tboard, player, scores), -1, -1];
 	}
@@ -599,6 +606,7 @@ function addListeners() {
 		for( var j=0; j < 6; j++) {
 
 			$('#'+i+"-"+j).click(function(){
+				moves[turn-1]+=1;
 				var ch=0;
 				x = $(this).attr("id");
 				y = x.split("-");
@@ -676,7 +684,14 @@ function addListeners() {
 						if(pmode[2-turn] != 0) {
 							//alert("hain");
 							setStatus(other);
+							moves[2-turn]+=1;
+							var dd = new Date();
+							var t1 = dd.getTime();
 							playOpponent(turn);
+							dd = new Date();
+							var t2 = dd.getTime();
+							timesum[2-turn] += (t2-t1);
+
 							if(isGameOver()){
 								w = winner();
 								if(w==3){
@@ -688,6 +703,7 @@ function addListeners() {
 								else{
 									setStatus("Blue wins");
 								}
+								$('#savelogsbtn').show().fadeIn('slow');
 							}
 						}
 						else{
@@ -708,6 +724,7 @@ function addListeners() {
 						else{
 							setStatus("Blue wins");
 						}
+						$('#savelogsbtn').show().fadeIn('slow');
 					}
 				}
 			});
@@ -878,6 +895,7 @@ function changeMode(p,m){
 		resetBoard();
 		started = 0;
 		$('#restart').hide().fadeOut('slow');
+		$('#savelogsbtn').hide().fadeOut('slow');
 		$('#start').show().fadeIn('slow');
 		logs = [];
 		$('#logtable').html("");
@@ -888,15 +906,21 @@ function changeMode(p,m){
 }
 
 function p1MiniMax() {
+	moves[2-turn]+=1;
 	setStatus(cur);
+	var dd = new Date();
+	var t1 = dd.getTime();
 	playOpponent(turn);
+	dd = new Date();
+	var t2 = dd.getTime();
+	timesum[2-turn] += (t2-t1);
 	//alert("hello");
 	to1 = setTimeout(function(){
 		//alert("sfvdsfg");
 		if(isGameOver()){
 			w = winner();
 			if(w==3){
-				//setStatus("Green wins");
+				setStatus("Green wins");
 			}
 			else if(w==2){
 				setStatus("It's a draw");
@@ -904,6 +928,7 @@ function p1MiniMax() {
 			else{
 				setStatus("Blue wins");
 			}
+			$('#savelogsbtn').show().fadeIn('slow');
 		}
 		else{
 			turn = 3-turn;
@@ -916,8 +941,14 @@ function p1MiniMax() {
 }
 
 function p2MiniMax() {
+	moves[2-turn]+=1;
 	setStatus(cur);
+	var dd = new Date();
+	var t1 = dd.getTime();
 	playOpponent(turn);
+	dd = new Date();
+	var t2 = dd.getTime();
+	timesum[2-turn] += (t2-t1);
 	to2 = setTimeout(function(){
 		if(isGameOver()){
 			w = winner();
@@ -930,6 +961,7 @@ function p2MiniMax() {
 			else{
 				setStatus("Blue wins");
 			}
+			$('#savelogsbtn').show().fadeIn('slow');
 		}
 		else{
 			//alert("what")
@@ -943,6 +975,12 @@ function p2MiniMax() {
 }
 
 function startGame() {
+	nodesExpanded[0]=0;
+	nodesExpanded[1]=0;
+	moves[0]=0;
+	moves[1]=0;
+	timesum[0]=0;
+	timesum[1]=0;
 	//alert(pmode);
 	$('#start').hide().fadeOut('slow');
 	$('#restart').show().fadeIn('slow');
@@ -959,7 +997,14 @@ function startGame() {
 			cur="green";
 			other="blue";
 			setStatus("green");
+			moves[turn-1]++;
+			var dd = new Date();
+			var t1 = dd.getTime();
 			playOpponent(turn);
+			dd = new Date();
+			var t2 = dd.getTime();
+			timesum[2-turn] += (t2-t1);
+
 		}
 		if(pmode[0] != 0 && pmode[1] != 0) {
 			turn = 2;
@@ -972,6 +1017,8 @@ function startGame() {
 }
 
 function restartGame() {
+
+	$('#savelogsbtn').hide().fadeOut('slow');
 	clearTimeout(to1);
 	clearTimeout(to2);
 	started = 0;
@@ -996,7 +1043,37 @@ function activateDropdownListener() {
 		resetBoard();
 	});
 }
+
+function saveLogs() {
+	var logname = $('#logname').val();
+	var logfiledata = "";
+	for(var i=0;i < logs.length ; i++) {
+		logfiledata += logs[i]+"\n";
+	}
+	var blob = new Blob([logfiledata],{type: "text/plain;charset=utf-8"});
+	saveAs(blob, logname+".txt");
+}
+
+function saveResults() {
+	var resname = $('#resname').val();
+	var resfiledata = "Scores: \n";
+	var bluescore = calcScore(1);
+	var greenscore = calcScore(2);
+	resfiledata += "Blue: "+bluescore+"\nGreen: "+greenscore+"\n\nTotal number of game tree nodes expanded: \nBlue: "+nodesExpanded[0]+"\nGreen: "+nodesExpanded[1]+"\n\n Average number of nodes expanded: \n";
+	var blueMavg = nodesExpanded[0]/moves[0];
+	var greenMavg = nodesExpanded[1]/moves[1];
+	resfiledata += "Blue: "+blueMavg+"\nGreen: "+greenMavg+"\n\nAverage Time per move: \n";
+	var blueTavg = timesum[0]/moves[0];
+	var greenTavg = timesum[1]/moves[1];
+	resfiledata += "Blue: "+blueTavg+"\nGreen: "+greenTavg+"\n";
+	//alert(blueMavg+" "+greenMavg+" "+blueTavg+" "+greenTavg);
+	var blob = new Blob([resfiledata],{type: "text/plain;charset=utf-8"});
+	saveAs(blob, resname+".txt");
+
+}
 $(document).ready(function(){
+	// var blob = new Blob(["hello world"],{type: "text/plain;charset=utf-8"});
+	// saveAs(blob,"hello.txt");
 	activateDropdownListener();
 	resetBoard();
 	$("#logtable").on('scroll', function(){
