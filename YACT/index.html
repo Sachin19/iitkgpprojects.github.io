@@ -18,6 +18,7 @@
     <!-- Custom styles for this template -->
     <script type="text/javascript" src="jquery-ui-1.10.2/jquery-1.9.1.js"></script>
     <script type="text/javascript" src="jquery-ui-1.10.2/ui/jquery-ui.js"></script>
+    <script type="text/javascript" src="FileSaver.js"></script>
     <script type="text/javascript" src="nextmove.js"></script>
     <script type="text/javascript" src="game.js"></script>
 
@@ -68,7 +69,7 @@
           <!-- Single button -->
           <div><img src="logo.png" style="height:60px;" /></div>
           <div class="btn-group" style="width:100%;">
-            <button class="btn btn-default" style="width:100%;" data-toggle="modal" data-target="#rules">How to Play</button><br /><br /><br /><br />
+            <button class="btn btn-default" style="width:100%;" data-toggle="modal" data-target="#rules">How to Play</button><br /><br /><br />
             <button type="button" class="btn btn-default dropdown-toggle" style="width:100%;" data-toggle="dropdown"><span id="boardtype">Random</span> <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu" style="width:100%;">
@@ -95,9 +96,10 @@
           <br />
           <button class="btn btn-warning" style="width:100%;" id="start" onclick="startGame()">Start</button>
           <button class="btn btn-warning" style="width:100%; display:none;" id="restart" onclick="restartGame()">Restart</button>
+          <br /><br /><button class="btn btn-success" style="width:100%; display:none;" id="savelogsbtn" data-toggle="modal" data-target="#logsave">Save Results</button>
         </div>
         <div class="col-md-8">
-          <div class="container" style="width:80%;">
+          <div class="container" style="width:78%;">
             <div class="panel panel-default">
               <table class="table">
                 <tr>
@@ -154,6 +156,19 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="logsave" tabindex="-1" role="dialog" aria-labelledby="saveLogLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="saveLogLabel" style="text-align:center;">Save the Results</h4>
+          </div>
+          <div class="modal-body" style="padding:30px;">
+            <div class="input-group" ><input placeholder="Log File Name" class="form-control" id="logname" /><span class="input-group-btn"><button id="lognamebtn" onclick="saveLogs()" class="btn btn-success bt">Save</button></span></div><br /><div class="input-group" ><input placeholder="Results File Name" class="form-control" id="resname" /><span class="input-group-btn"><button id="resnamebtn" onclick="saveResults()" class="btn btn-success">Save</button></span></div>
         </div>
       </div>
     </div>
