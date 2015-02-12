@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="favicon.ico">
+    <script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
+
+    <title>Survey Results</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="starter-template.css" rel="stylesheet">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+    <script type="text/javascript" src="viewmaps.js"></script>
+    <script type="text/javascript" src="js/bootstrap-filestyle.min.js"> </script>
+	
+    <style type="text/css">
+    body, html {
+      margin:0;
+      height: 100%;
+    }
+    .center-table
+    {
+      margin: 0 auto !important;
+      float: none !important;
+    }
+    .modal-dialog {
+      width: 90%;
+    }
+     .modal-body {
+      overflow-y: auto;
+    }
+    .fileinput{
+      filter: alpha(opacity=0);
+      opacity: 0;
+      outline: none;
+      background: white;
+      cursor: inherit;
+      display: block;
+    }
+    </style>
+    
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div class="container-fluid navbar-inverse" role="navigation" id="navbar">
+        <!-- Brand and toggle get grouped for better mobile display -->
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <form class="navbar-form navbar-left navbar-input-group" role="search">
+              <div class="form-group">
+                <input type="file" class="filestyle" placeholder="Search">
+              </div>
+              <div class="form-group">
+                <select class="form-control" id="que"></select>
+              </div>
+
+              </div>
+          </form>
+          
+          
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+      <div class="container-fluid" style="height:100%;" id="viewmap"></div>
+
+      <!-- <div class="modal fade" id="logsave" tabindex="-1" role="dialog" aria-labelledby="saveLogLabel" aria-hidden="true">
+      <div class="modal-dialog" style="width:50%;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="saveLogLabel" style="text-align:center;">Filter the results based on questions</h4>
+          </div>
+          <div class="modal-body" id="questions" style="padding:30px;">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" id="filter" data-dismiss="modal">Filter</button>
+          </div>
+      </div>
+    </div> -->
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>
